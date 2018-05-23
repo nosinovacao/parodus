@@ -93,6 +93,10 @@ typedef struct
     char webpa_auth_token[4096];
     char token_acquisition_script[64];
     char token_read_script[64];
+#ifdef ENABLE_MUTUAL_AUTH
+    char client_cert_path[64];
+    char client_key_path[64];
+#endif
 } ParodusCfg;
 
 #define FLAGS_IPV6_ONLY (1 << 0)
