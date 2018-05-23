@@ -299,6 +299,10 @@ int parseCommandLine(int argc,char **argv,ParodusCfg * cfg)
         {"force-ipv6",              no_argument,       0, '6'},
         {"token-read-script",       required_argument, 0, 'T'},
 	{"token-acquisition-script",     required_argument, 0, 'J'},
+#ifdef ENABLE_MUTUAL_AUTH
+	{"client-cert-path",		required_argument, 0, 'C'},
+	{"client-key-path",		required_argument, 0, 'K'},
+#endif
         {0, 0, 0, 0}
     };
     int c;
@@ -319,9 +323,14 @@ int parseCommandLine(int argc,char **argv,ParodusCfg * cfg)
 
       /* getopt_long stores the option index here. */
       int option_index = 0;
+#ifdef ENABLE_MUTUAL_AUTH
+      c = getopt_long (argc, argv, "m:s:f:d:r:n:b:u:t:o:i:l:p:e:D:j:a:k:c:T:J:46C:K:",
+				long_options, &option_index);
+#else
       c = getopt_long (argc, argv, "m:s:f:d:r:n:b:u:t:o:i:l:p:e:D:j:a:k:c:T:J:46",
 				long_options, &option_index);
 
+#endif
       /* Detect the end of the options. */
       if (c == -1)
         break;
@@ -462,6 +471,15 @@ int parseCommandLine(int argc,char **argv,ParodusCfg * cfg)
           parStrncpy(cfg->token_read_script, optarg,sizeof(cfg->token_read_script));
           break;
 
+#ifdef ENABLE_MUTUAL_AUTH
+        case 'C':
+          parStrncpy(cfg->client_cert_path, optarg,sizeof(cfg->client_cert_path));
+          break;
+
+        case 'K':
+          parStrncpy(cfg->client_key_path, optarg,sizeof(cfg->client_key_path));
+          break;
+#endif
         case '?':
           /* getopt_long already printed an error message. */
           break;
